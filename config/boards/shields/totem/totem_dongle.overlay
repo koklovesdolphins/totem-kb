@@ -1,0 +1,17 @@
+#include "totem.dtsi"
+
+/* Dongle has no physical switches. Real keystrokes come from the two
+ * peripherals over BLE; this shield's own kscan is never scanned, so use
+ * ZMK's mock kscan driver instead of wiring dummy GPIOs (which hit a
+ * GPIO/GPIOTE allocation issue on this board when treated as a real
+ * gpio-matrix kscan). */
+&kscan0 {
+    compatible = "zmk,kscan-mock";
+    columns = <10>;
+    rows = <4>;
+    events = <>;
+    /delete-property/ diode-direction;
+    /delete-property/ row-gpios;
+    /delete-property/ col-gpios;
+    /delete-property/ wakeup-source;
+};
