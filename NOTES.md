@@ -264,3 +264,90 @@ advertisement; they can share the same visible name).
   `~/right_diag*.txt`, `~/scan_*.txt`) are left over from this session's debugging. Safe to delete
   whenever — not needed for the working config, which lives in `build/left`, `build/right`,
   `build/dongle`, `build/reset`, `build/reset-nicenano` plus the tracked/uncommitted config files.
+
+---
+
+## STATUS UPDATE (2026-07-30, later): dongle OLED display + battery-saver sleep WORKING
+
+**Added the `zmk-dongle-display` community module** (https://github.com/englmaxi/zmk-dongle-display,
+pinned in `config/west.yml` at commit `2bb333f87136d33e94a49d86236ed9ec254a8060`) to drive the
+dongle's physical OLED screen — battery level, active layer number, and modifier-key indicators
+(Bongo Cat and WPM widgets explicitly left off). This confirmed the dongle really does have a
+real I2C OLED wired up (the "2 battery percentages" the user remembered from the factory
+firmware).
+
+**What changed (all in the working tree, still uncommitted in `~/totem` like everything else):**
+- `config/west.yml` — added the `englmaxi` remote + `zmk-dongle-display` project.
+- `build.yaml` — dongle's `shield:` line changed from `totem_dongle` to
+  `totem_dongle dongle_display` (space-separated multi-shield, same pattern ZMK uses for e.g.
+  `corne_left nice_view`).
+- `config/boards/shields/totem/totem_dongle.overlay` — added a `zephyr,display` chosen node +
+  an OLED devicetree node on `&pro_micro_i2c` (nice!nano's I2C alias, confirmed at
+  `zmk/app/module/boards/nicekeyboards/nice_nano/arduino_pro_micro_pins.dtsi:55`).
+- `config/boards/shields/totem/totem_dongle.conf` — added Bongo Cat off, Mac modifier icons on,
+  a bigger font (Montserrat 16) + right-alignment for the layer widget, and a 5-minute OLED idle
+  timeout (`CONFIG_ZMK_IDLE_TIMEOUT=300000`).
+- **New** `config/boards/shields/totem/totem_left.conf` and `totem_right.conf` (didn't exist
+  before — left/right previously only used the shared `totem.conf`) — each sets
+  `CONFIG_ZMK_SLEEP=y` to enable deep sleep on the halves (15 min idle, the Kconfig default).
+  **Wake from deep sleep is a full chip reset + BLE reconnect (~1-3s), not instant** — the
+  waking keypress itself is typically dropped. User was told this tradeoff explicitly before
+  opting in.
+
+**Display driver had to be discovered by trial, not known in advance** (no way to read the chip
+markings on the physical OLED): first tried `solomon,ssd1306fb` (the module's stated default) —
+booted, but the screen showed a garbled image. Switched to `sinowealth,sh1106` with
+`segment-offset = <2>` (matching `zephyr/boards/shields/ssd1306/sh1106_128x64.overlay` in the ZMK
+source tree exactly) — this fixed it. If a similar dongle needs this again: try ssd1306fb first,
+fall back to sh1106 if the picture is garbled.
+
+**Two real bugs found in the `zmk-dongle-display` module itself** (not our config), fixed via a
+**local patch to the fetched west module** — since `west.yml` only pins a commit, these are
+**not preserved automatically** if the module is ever refetched fresh. The patch is saved at
+`~/totem-kb/zmk-dongle-display-local-fixes.patch` (apply with `git apply` from inside
+`zmk-dongle-display/` after a `west update`, or reapply manually — it's only ~5 lines):
+
+1. **Layer widget showed nothing, ever, regardless of position or which layer was active.**
+   Root cause: `zmk_keymap_layer_name()` (in `zmk/app/src/keymap.c`) never returns `NULL` when
+   `CONFIG_ZMK_KEYMAP_SETTINGS_STORAGE` is enabled (which it is here, needed for ZMK Studio) — it
+   returns a pointer to a fixed-size char buffer that's an **empty string** `""` for any layer
+   without an explicitly-set name, not `NULL`. The widget's `set_layer_symbol()` in
+   `widgets/layer_status.c` only checked `state.label == NULL`, so it always took the
+   "show the label" branch and rendered an empty string instead of falling back to the numeric
+   index. Fix: check `state.label == NULL || state.label[0] == '\0'`. This was diagnosed by
+   temporarily moving the widget to `LV_ALIGN_CENTER` (ruled out a positioning/clipping bug since
+   it still showed nothing dead-center), then reading `zmk_keymap_layer_name()`'s actual
+   implementation rather than guessing further.
+2. **Wanted a bigger font just for the layer widget** — added
+   `lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_16, 0)` in
+   `zmk_widget_layer_status_init()`, plus `CONFIG_LV_FONT_MONTSERRAT_16=y` in
+   `totem_dongle.conf` (not a bug, just a tweak, bundled in the same patch file for convenience).
+
+**New Docker/permissions gotcha discovered this session:** after fixing serial-port read
+permissions by adding the user to the `dialout` group (needed a **real** logout/login — a locked
+screen or `loginctl` session that never actually restarted does NOT pick up new group membership,
+confirmed by checking a freshly-started process's `/proc/PID/status` `Groups:` line still missing
+`dialout` even after the user believed they'd relogged in), we then hit a **second, unrelated**
+permission issue: `sudo chown -R kc:kc` on the Docker-created directories (`zmk/`, `zephyr/`,
+`modules/`, `build/`, `zmk-dongle-display/`, `.west/` — all root-owned since `west update`/
+`west build` run as root inside the container) so the host user could edit files directly, e.g.
+`zmk-dongle-display/boards/shields/dongle_display/custom_status_screen.c`. This then broke `west
+build` **inside the Docker container** with a cryptic `FATAL ERROR: failed manifest import in zmk:
+... Hint: zmk must be cloned, owned by the user...` — modern git refuses to operate on a
+repository whose owner (now `kc`/1000, after the chown) doesn't match the running process's user
+(`root`/0 inside the container, by default). Fix: add `git config --global --add safe.directory
+'*'` as the first step in every `docker run` invocation from here on, since we now routinely edit
+these directories from the host between builds.
+
+**Verification performed:** display shows correctly (after the sh1106 switch), layer number shows
+correctly (after the empty-string fix) in the bigger right-aligned font, Mac modifier icons
+correct, regression-checked that typing from both halves still reaches the PC through the dongle
+after every rebuild/reflash (this work never touched BLE/split code, only devicetree/Kconfig for
+display + the sleep Kconfig for left/right).
+
+**Not yet done:**
+- Left/right haven't actually been reflashed with the new `CONFIG_ZMK_SLEEP=y` firmware yet at
+  the time of this note (only the dongle was flashed with the display changes so far this
+  session) — `build/left/zephyr/zmk.uf2` and `build/right/zephyr/zmk.uf2` have it built and ready.
+- Deep sleep wake behavior (the ~1-3s reconnect, dropped first keypress) hasn't been physically
+  observed/timed yet — worth confirming once left/right are reflashed.

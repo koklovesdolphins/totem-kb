@@ -15,3 +15,30 @@
     /delete-property/ col-gpios;
     /delete-property/ wakeup-source;
 };
+
+/* Physical OLED on the dongle. First try (ssd1306fb) showed a garbled image --
+ * switched to sh1106, matching zephyr/boards/shields/ssd1306/sh1106_128x64.overlay
+ * exactly (same segment-offset=2, no inversion-on). */
+/ {
+    chosen {
+        zephyr,display = &oled;
+    };
+};
+
+&pro_micro_i2c {
+    status = "okay";
+
+    oled: ssd1306@3c {
+        compatible = "sinowealth,sh1106";
+        reg = <0x3c>;
+        width = <128>;
+        height = <64>;
+        segment-offset = <2>;
+        page-offset = <0>;
+        display-offset = <0>;
+        multiplex-ratio = <63>;
+        segment-remap;
+        com-invdir;
+        prechargep = <0x22>;
+    };
+};

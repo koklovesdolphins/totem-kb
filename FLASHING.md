@@ -45,6 +45,40 @@ the settings_reset + reflash cycle a second time** on the affected half. Root ca
 pinned down (likely a stale bond/NVS remnant from that board's history), but the fix was simple
 and reliable. See the 2026-07-30 status update in `NOTES.md` for the full debugging trail.
 
+## Reflashing after a display/Kconfig-only change (no settings_reset needed)
+
+`settings_reset` is only needed when BLE bonds need clearing. For changes that are purely
+devicetree/Kconfig (display tweaks, sleep settings, etc.), just flash the real firmware directly
+— no need to touch bonds. All three current `firmware/*.uf2` files include the OLED display
+(dongle) and deep-sleep battery saver (left/right); reflash them the same way as any other
+firmware update, `settings_reset` not required.
+
+## OLED display (dongle)
+
+Driver is `sinowealth,sh1106` (128x64, on `pro_micro_i2c`) — the module's stated default
+(`solomon,ssd1306fb`) showed a garbled image on this hardware; sh1106 is the one that actually
+works here. Shows battery, active layer (bigger font, right-aligned), and Mac-style modifier
+icons. Screen blanks after 5 minutes idle.
+
+**Important if rebuilding from source:** the `zmk-dongle-display` west module (pinned in
+`config/west.yml`) needed two local bug fixes that aren't upstream — see
+`zmk-dongle-display-local-fixes.patch` in this repo. After any fresh `west update` fetches that
+module, apply the patch before building:
+```bash
+cd <wherever west put zmk-dongle-display>
+git apply /path/to/zmk-dongle-display-local-fixes.patch
+```
+Without it, the layer-number widget renders nothing (a real bug in the module, not our config —
+see `NOTES.md` for the full root-cause explanation).
+
+## Battery saver (left/right deep sleep)
+
+`CONFIG_ZMK_SLEEP=y` is enabled on both halves (15 min idle timeout, the default). **Waking up is
+a full chip reset + BLE reconnect, roughly 1-3 seconds — not instant**, and the keypress that
+wakes the board is typically dropped. This is a deliberate tradeoff for battery life, not a bug —
+just press the key again if the first one after a long idle doesn't register. The dongle itself
+does NOT sleep (it's USB-powered and needs to stay connected as central).
+
 ## ZMK Studio
 
 The dongle firmware includes the `studio-rpc-usb-uart` snippet and `CONFIG_ZMK_STUDIO=y`, so ZMK

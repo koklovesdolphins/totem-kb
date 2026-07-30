@@ -1,0 +1,21 @@
+diff --git a/boards/shields/dongle_display/widgets/layer_status.c b/boards/shields/dongle_display/widgets/layer_status.c
+index 6b1ec4f..a47049c 100644
+--- a/boards/shields/dongle_display/widgets/layer_status.c
++++ b/boards/shields/dongle_display/widgets/layer_status.c
+@@ -24,7 +24,7 @@ struct layer_status_state {
+ };
+ 
+ static void set_layer_symbol(lv_obj_t *label, struct layer_status_state state) {
+-    if (state.label == NULL) {
++    if (state.label == NULL || state.label[0] == '\0') {
+         char text[7] = {};
+ 
+         sprintf(text, "%i", state.index);
+@@ -61,6 +61,7 @@ int zmk_widget_layer_status_init(struct zmk_widget_layer_status *widget, lv_obj_
+     widget->obj = lv_label_create(parent);
+     lv_obj_set_width(widget->obj, CONFIG_ZMK_DONGLE_DISPLAY_LAYER_NAME_SCROLL_WIDTH);
+     lv_label_set_long_mode(widget->obj, LV_LABEL_LONG_SCROLL_CIRCULAR);
++    lv_obj_set_style_text_font(widget->obj, &lv_font_montserrat_16, 0);
+ 
+     // Set text alignment based on config
+     if (strcmp(CONFIG_ZMK_DONGLE_DISPLAY_LAYER_TEXT_ALIGN, "right") == 0) {

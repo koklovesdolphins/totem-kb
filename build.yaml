@@ -29,7 +29,7 @@ include:
     shield: settings_reset
     artifact-name: settings_reset_xiao_ble
   - board: nice_nano/nrf52840/zmk
-    shield: totem_dongle
+    shield: totem_dongle dongle_display
     snippet: studio-rpc-usb-uart
     cmake-args: -DCONFIG_ZMK_STUDIO=y
   - board: nice_nano/nrf52840/zmk
