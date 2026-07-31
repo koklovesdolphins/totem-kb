@@ -20,25 +20,17 @@
 #define BASE      0
 #define NAV       1
 #define SYM       2
-#define ADJ       3
-#define MOUSE     4
-#define MAC_BASE  5
+#define MOUSE     3
+#define MAC_BASE  4
 
 &mt {
-  quick-tap-ms = <100>;
-  global-quick-tap;
   flavor = "tap-preferred";
-  tapping-term-ms = <200>;
+  tapping-term-ms = <300>;
 };
 
 / {
     combos {
             compatible = "zmk,combos";
-            combo_esc {
-                timeout-ms = <50>;
-                key-positions = <0 1>;
-                bindings = <&kp ESC>;
-            };
             combo_mac_toggle {
                 timeout-ms = <100>;
                 key-positions = <10 23 27>;
@@ -70,15 +62,15 @@ label= "BASE"                              ;
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃ SHIFT/BSPC┃     Z     ┃     X     ┃     C     ┃     V     ┃     B     ┃   ┃     N     ┃     M     ┃     ,     ┃     .     ┃     /     ┃SHIFT/QUOT ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-//                                     ┃ LCTRL     ┃  SPC      ┃ ENTR/ESC  ┃   ┃ ENTR/ESC  ┃    NAV    ┃ SYM/TAB   ┃
+//                                     ┃   LCTRL   ┃    SPC    ┃ ENTR/ESC  ┃   ┃   ENTER   ┃    NAV    ┃  SYM/TAB  ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &kp Q          &kp W       &kp E       &kp R       &kp T           &kp Y       &kp U          &kp I          &kp O          &kp P
-                &kp A          &mt LCTRL S &mt LGUI D  &mt LALT F  &kp G           &kp H       &mt LCTRL J    &mt LGUI K     &mt LALT L     &kp SEMI
-    &mt LSHFT BSPC &kp Z       &kp X       &kp C       &kp V       &kp B           &kp N       &kp M          &kp COMMA      &kp DOT        &kp FSLH    &mt RSHFT SQT
-                                           &kp LCTRL  &kp SPACE   &td0             &td0        &mo NAV        &lt SYM TAB
+                &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp P
+                &kp A           &mt LCTRL S     &mt LGUI D      &mt LALT F      &kp G               &kp H           &mt LCTRL J     &mt LGUI K      &mt LALT L      &kp SEMI
+    &mt LSHFT BSPC  &kp Z       &kp X           &kp C           &kp V           &kp B               &kp N           &kp M           &kp COMMA       &kp DOT         &kp FSLH        &mt RSHFT SQT
+                                                &kp LCTRL       &kp SPACE       &td0                &kp RET         &mo NAV         &lt SYM TAB
                         >;
                 };
 
@@ -101,10 +93,10 @@ label= "NAVI"                              ;
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &kp GRAVE   &kp LS(GRAVE)  &kp HOME    &kp END     &trans       &trans      &kp MINUS   &kp UP      &kp EQUAL   &kp C_VOL_UP
-                &trans      &kp LBRC    &kp LBKT    &kp RBKT    &kp RBRC        &trans      &kp LEFT    &kp DOWN    &kp RIGHT   &kp C_VOL_DN
-    &kp DEL     &trans      &trans      &kp LPAR    &kp RPAR    &trans          &trans     &TODO ZOOM-      &trans  &TODO ZOOM+       &trans          &kp BSLH
-                                        &trans      &mo MOUSE    &kp ESC        &tog MAC_BASE   &trans      &trans
+                &kp GRAVE       &kp LS(GRAVE)   &kp HOME        &kp END         &trans              &trans          &kp MINUS       &kp UP          &kp EQUAL       &kp C_VOL_UP
+                &trans          &kp LBRC        &kp LBKT        &kp RBKT        &kp RBRC            &trans          &kp LEFT        &kp DOWN        &kp RIGHT       &kp C_VOL_DN
+    &kp DEL         &trans      &trans          &kp LPAR        &kp RPAR        &trans              &trans          &kp LC(MINUS)   &trans          &kp LC(EQUAL)   &trans          &kp BSLH
+                                                &trans          &mo MOUSE       &kp ESC             &tog MAC_BASE   &trans          &trans
                         >;
                 };
 
@@ -127,10 +119,10 @@ label= "SYM"                               ;
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &none       &none       &none       &none        &none           &none       &kp KP_N1   &kp KP_N2   &kp KP_N3   &none     
-                &kp EXCL    &kp AT      &kp HASH    &kp DLLR     &kp PRCNT       &kp KP_N0   &kp KP_N4   &kp KP_N5   &kp KP_N6   &none
-    &trans      &none       &kp CARET   &kp AMPS    &kp ASTRK    &none           &none       &kp KP_N7   &kp KP_N8   &kp KP_N9   &none   &kp GRAVE
-                                        &none       &none       &none           &none       &none   &none       
+                &none           &none           &none           &none           &none               &none           &kp KP_N1       &kp KP_N2       &kp KP_N3       &none
+                &kp EXCL        &kp AT          &kp HASH        &kp DLLR        &kp PRCNT           &kp KP_N0       &kp KP_N4       &kp KP_N5       &kp KP_N6       &none
+    &trans          &none       &kp CARET       &kp AMPS        &kp ASTRK       &none               &none           &kp KP_N7       &kp KP_N8       &kp KP_N9       &none           &kp GRAVE
+                                                &none           &none           &none               &none           &none           &none
                         >;
                 };
 
@@ -142,22 +134,21 @@ label= "SYM"                               ;
 label= "MOUSE"                             ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
-//             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃  MOVE_UP  ┃           ┃           ┃
+//             ┃           ┃           ┃           ┃  SCRL_UP  ┃           ┃   ┃           ┃ SCRL_LEFT ┃  MOVE_UP  ┃ SCRL_RIGHT┃           ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
 //             ┃           ┃           ┃   LCLK    ┃   MCLK    ┃   RCLK    ┃   ┃           ┃ MOVE_LEFT ┃ MOVE_DOWN ┃ MOVE_RIGHT┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
-// ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃  BACK     ┃  SEARCH   ┃  REFRESH  ┃ FORWARD   ┃           ┃           ┃
+// ┃           ┃           ┃           ┃           ┃ SCRL_DOWN ┃           ┃   ┃  BACK     ┃ SEARCH    ┃  REFRESH  ┃ FORWARD   ┃           ┃           ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
 //                                     ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &trans      &trans      &trans      &trans      &trans          &trans        &trans          &mmv MOVE_UP       &trans            &trans
-                &trans      &trans      &mkp LCLK   &mkp MCLK   &mkp RCLK       &trans        &mmv MOVE_LEFT  &mmv MOVE_DOWN     &mmv MOVE_RIGHT   &trans
-    &trans      &trans      &trans      &trans      &trans      &trans          &kp C_AC_BACK &kp C_AC_SEARCH &kp C_AC_REFRESH   &kp C_AC_FORWARD  &trans      &trans
-                                        &trans      &trans      &trans          &trans       &trans      &trans
+                &trans          &trans          &trans          &msc SCRL_UP    &trans              &trans          &msc SCRL_LEFT  &mmv MOVE_UP    &msc SCRL_RIGHT &trans
+                &trans          &trans          &mkp LCLK       &mkp MCLK       &mkp RCLK           &trans          &mmv MOVE_LEFT  &mmv MOVE_DOWN  &mmv MOVE_RIGHT &trans
+    &trans          &trans      &trans          &trans          &msc SCRL_DOWN  &trans              &kp C_AC_BACK   &kp C_AC_SEARCH &kp C_AC_REFRESH &kp C_AC_FORWARD &trans         &trans
+                                                &trans          &trans          &trans              &trans          &trans          &trans
                         >;
                 };
 
@@ -170,35 +161,28 @@ label= "MAC"                               ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 // Mostly transparent — falls through to lower layers. Swaps GUI<->ALT on the
 // home-row mod-tap keys (D/F left, K/L right), swaps the middle-left thumb
-// key's hold-mod from CTRL to GUI/CMD (tap is still SPACE either way), and
-// swaps MOUSE's zoom keys (Y/P) from Ctrl+-/Ctrl+= to Cmd+-/Cmd+=. This is
-// intentionally the highest layer number in the keymap so its overrides beat
-// MOUSE's whenever both are active at once (e.g. holding into MOUSE while
-// Mac mode is toggled on). Toggled on/off via ADJ's &tog MAC_BASE key,
-// matching the Keyball's TG(5) Windows/Mac layer swap.
-//
-// NOTE: overriding the middle-left thumb key here means that while Mac mode
-// is on, the NAV-side path to ADJ (hold NAV-thumb + hold this key) no longer
-// reaches ADJ, since this key now has a real binding instead of &trans. The
-// SYM-side path (hold SYM/TAB-thumb + tap the NAV-thumb key) still works,
-// so &tog MAC_BASE is always still reachable to flip back to Windows mode.
+// key from CTRL to GUI/CMD, and swaps NAV's zoom keys (Ctrl+-/Ctrl+=) to
+// Cmd+-/Cmd+=. This is intentionally the highest layer number in the keymap
+// so its overrides beat NAV's/MOUSE's whenever both are active at once.
+// Toggled on/off via &tog MAC_BASE — reachable either by holding NAV, then
+// tapping the key marked MAC/WIN on the NAV diagram above, or via the
+// combo_mac_toggle combo (A + C + M pressed together) defined up top.
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
 //             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
 //             ┃           ┃           ┃   LALT D  ┃  LGUI F   ┃           ┃   ┃           ┃  LALT K   ┃  LGUI L   ┃           ┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
-// ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃           ┃
+// ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃  ZOOM-    ┃           ┃  ZOOM+    ┃           ┃           ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
 //                                     ┃   LGUI    ┃           ┃           ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &trans      &trans      &trans      &trans      &trans          &trans      &trans     &trans      &trans        &trans
-                &trans      &trans      &mt LALT D  &mt LGUI F  &trans          &trans      &mt LALT K  &mt LGUI L  &trans      &trans
-    &trans      &trans      &trans      &trans      &trans      &trans          &trans      &trans      &trans      &trans      &trans      &trans
-                                        &kp LGUI    &trans      &trans          &trans      &trans      &trans
+                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+                &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &mt LALT K      &mt LGUI L      &trans          &trans
+    &trans          &trans      &trans          &trans          &trans          &trans              &trans          &kp LG(MINUS)   &trans          &kp LG(EQUAL)   &trans          &trans
+                                                &kp LGUI        &trans          &trans              &trans          &trans          &trans
                         >;
                 };
         };
