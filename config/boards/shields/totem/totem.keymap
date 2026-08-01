@@ -82,9 +82,9 @@ label= "BASE"                              ;
 label= "NAVI"                              ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
-//             ┃     `     ┃     ~     ┃    HOME   ┃    END    ┃           ┃   ┃           ┃     -     ┃     UP    ┃     =     ┃   VOL+    ┃
+//             ┃     `     ┃     ~     ┃    HOME   ┃    END    ┃           ┃   ┃    VOL+   ┃     -     ┃     UP    ┃     =     ┃           ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃           ┃     {     ┃     [     ┃     ]     ┃     }     ┃   ┃           ┃   LEFT    ┃    DOWN   ┃   RIGHT   ┃   VOL-    ┃
+//             ┃    BSPC   ┃     {     ┃     [     ┃     ]     ┃     }     ┃   ┃    VOL-   ┃   LEFT    ┃    DOWN   ┃   RIGHT   ┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃   DEL     ┃           ┃           ┃     (     ┃     )     ┃           ┃   ┃           ┃   ZOOM-   ┃           ┃  ZOOM+    ┃           ┃    \      ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
@@ -93,8 +93,8 @@ label= "NAVI"                              ;
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
-                &kp GRAVE       &kp LS(GRAVE)   &kp HOME        &kp END         &trans              &trans          &kp MINUS       &kp UP          &kp EQUAL       &kp C_VOL_UP
-                &trans          &kp LBRC        &kp LBKT        &kp RBKT        &kp RBRC            &trans          &kp LEFT        &kp DOWN        &kp RIGHT       &kp C_VOL_DN
+                &kp GRAVE       &kp LS(GRAVE)   &kp HOME        &kp END         &trans              &kp C_VOL_UP          &kp MINUS       &kp UP          &kp EQUAL      &trans 
+                &kp BSPC        &kp LBRC        &kp LBKT        &kp RBKT        &kp RBRC            &kp C_VOL_DN          &kp LEFT        &kp DOWN        &kp RIGHT      &trans 
     &kp DEL         &trans      &trans          &kp LPAR        &kp RPAR        &trans              &trans          &kp LC(MINUS)   &trans          &kp LC(EQUAL)   &trans          &kp BSLH
                                                 &trans          &mo MOUSE       &kp ESC             &tog MAC_BASE   &trans          &trans
                         >;
@@ -170,7 +170,7 @@ label= "MAC"                               ;
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
 //             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃           ┃           ┃   LALT D  ┃  LGUI F   ┃           ┃   ┃           ┃  LALT K   ┃  LGUI L   ┃           ┃           ┃
+//             ┃           ┃           ┃   LALT D  ┃  LGUI F   ┃           ┃   ┃           ┃           ┃  LALT K   ┃   LGUI L  ┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃  ZOOM-    ┃           ┃  ZOOM+    ┃           ┃           ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
@@ -180,7 +180,7 @@ label= "MAC"                               ;
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
                 &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-                &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &mt LALT K      &mt LGUI L      &trans          &trans
+                &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &trans          &mt LALT K      &mt LGUI L      &trans
     &trans          &trans      &trans          &trans          &trans          &trans              &trans          &kp LG(MINUS)   &trans          &kp LG(EQUAL)   &trans          &trans
                                                 &kp LGUI        &trans          &trans              &trans          &trans          &trans
                         >;
