@@ -18,10 +18,11 @@
 #include <dt-bindings/zmk/pointing.h>
 
 #define BASE      0
-#define NAV       1
-#define SYM       2
-#define MOUSE     3
-#define MAC_BASE  4
+#define MAC_BASE  1
+#define NAV       2
+#define SYM       3
+#define MOUSE     4
+#define NAV_MAC   5
 
 &mt {
   flavor = "tap-preferred";
@@ -36,6 +37,24 @@
                 key-positions = <10 23 27>;
                 bindings = <&tog MAC_BASE>;
             };
+    };
+
+    // MAC_BASE only overrides plain BASE typing (it's layer 1, just above BASE).
+    // NAV/SYM/MOUSE are numbered higher so they always win over MAC_BASE's
+    // home-row swap when held at the same time -- otherwise MAC_BASE's
+    // non-transparent D/F/K/L bindings would clobber NAV's arrow keys and
+    // SYM's numbers at those same physical positions (this was a real bug,
+    // found 2026-08-01: holding NAV while MAC_BASE was toggled broke arrows).
+    // The one Mac-specific override that SHOULD win over NAV (the zoom
+    // shortcut becoming Cmd+-/Cmd+= instead of Ctrl+-/Ctrl+=) is handled by
+    // this conditional layer instead, which only activates when NAV and
+    // MAC_BASE are both active at once.
+    conditional_layers {
+        compatible = "zmk,conditional-layers";
+        mac_nav_zoom {
+            if-layers = <NAV MAC_BASE>;
+            then-layer = <NAV_MAC>;
+        };
     };
 
     behaviors {
@@ -71,6 +90,41 @@ label= "BASE"                              ;
                 &kp A           &mt LCTRL S     &mt LGUI D      &mt LALT F      &kp G               &kp H           &mt LCTRL J     &mt LGUI K      &mt LALT L      &kp SEMI
     &mt LSHFT BSPC  &kp Z       &kp X           &kp C           &kp V           &kp B               &kp N           &kp M           &kp COMMA       &kp DOT         &kp FSLH        &mt RSHFT SQT
                                                 &kp LCTRL       &kp SPACE       &td0                &kp RET         &mo NAV         &lt SYM TAB
+                        >;
+                };
+
+// ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+
+
+                mac_base_layer {
+// ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+label= "MAC"                               ;
+// ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
+// Layer 1 -- sits just above BASE, below NAV/SYM/MOUSE, so it only overrides
+// plain typing and never fights those layers for shared physical keys. Swaps
+// GUI<->ALT on the home-row mod-tap keys (D/F left, K/L right) and swaps the
+// middle-left thumb key from CTRL to GUI/CMD. The zoom-shortcut override
+// (Cmd+-/Cmd+= instead of Ctrl+-/Ctrl+= while NAV is also held) lives in the
+// NAV_MAC conditional layer near the bottom of this file, not here.
+// Toggled on/off via &tog MAC_BASE — reachable either by holding NAV, then
+// tapping the key marked MAC/WIN on the NAV diagram below, or via the
+// combo_mac_toggle combo (A + C + M pressed together) defined up top.
+//             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
+//             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃
+//             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
+//             ┃           ┃           ┃   LALT D  ┃  LGUI F   ┃           ┃   ┃           ┃           ┃  LALT K   ┃   LGUI L  ┃           ┃
+// ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
+// ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃           ┃
+// ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
+//                                     ┃   LGUI    ┃           ┃           ┃   ┃           ┃           ┃           ┃
+//                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
+ bindings = <
+// ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
+
+                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
+                &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &trans          &mt LALT K      &mt LGUI L      &trans
+    &trans          &trans      &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans          &trans
+                                                &kp LGUI        &trans          &trans              &trans          &trans          &trans
                         >;
                 };
 
@@ -155,35 +209,32 @@ label= "MOUSE"                             ;
 // ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
 
 
-                mac_base_layer {
+                nav_mac_layer {
 // ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
-label= "MAC"                               ;
+label= "N+MAC"                             ;
 // ┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛
-// Mostly transparent — falls through to lower layers. Swaps GUI<->ALT on the
-// home-row mod-tap keys (D/F left, K/L right), swaps the middle-left thumb
-// key from CTRL to GUI/CMD, and swaps NAV's zoom keys (Ctrl+-/Ctrl+=) to
-// Cmd+-/Cmd+=. This is intentionally the highest layer number in the keymap
-// so its overrides beat NAV's/MOUSE's whenever both are active at once.
-// Toggled on/off via &tog MAC_BASE — reachable either by holding NAV, then
-// tapping the key marked MAC/WIN on the NAV diagram above, or via the
-// combo_mac_toggle combo (A + C + M pressed together) defined up top.
+// Layer 5, the highest layer. Auto-activated by the conditional_layers node
+// up top ONLY when NAV and MAC_BASE are both active at once -- entirely
+// transparent except NAV's zoom keys, which become Cmd+-/Cmd+= here instead
+// of NAV's own Ctrl+-/Ctrl+=. Never activated directly by a binding.
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
 //             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃           ┃           ┃   LALT D  ┃  LGUI F   ┃           ┃   ┃           ┃           ┃  LALT K   ┃   LGUI L  ┃           ┃
+//             ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃  ZOOM-    ┃           ┃  ZOOM+    ┃           ┃           ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-//                                     ┃   LGUI    ┃           ┃           ┃   ┃           ┃           ┃           ┃
+//                                     ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
                 &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
-                &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &trans          &mt LALT K      &mt LGUI L      &trans
+                &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
     &trans          &trans      &trans          &trans          &trans          &trans              &trans          &kp LG(MINUS)   &trans          &kp LG(EQUAL)   &trans          &trans
-                                                &kp LGUI        &trans          &trans              &trans          &trans          &trans
+                                                &trans          &trans          &trans              &trans          &trans          &trans
                         >;
                 };
+
         };
 };
