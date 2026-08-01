@@ -1,0 +1,10 @@
+# West workspace (fetched via `west init`/`west update`) — large, third-party,
+# regenerable from config/west.yml. Only config/ and firmware/*.uf2 are tracked.
+/.west/
+/zephyr/
+/zmk/
+/zmk-dongle-display/
+/modules/
+/optional/
+/bootloader/
+/build/

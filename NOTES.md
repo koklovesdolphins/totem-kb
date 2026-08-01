@@ -351,3 +351,58 @@ display + the sleep Kconfig for left/right).
   session) — `build/left/zephyr/zmk.uf2` and `build/right/zephyr/zmk.uf2` have it built and ready.
 - Deep sleep wake behavior (the ~1-3s reconnect, dropped first keypress) hasn't been physically
   observed/timed yet — worth confirming once left/right are reflashed.
+
+## STATUS UPDATE (2026-08-01): keymap ported from a second board (Keyball/Vial) + a real footgun found and fixed
+
+**Rewrote `config/boards/shields/totem/totem.keymap` to match the layout from a separate
+Keyball/Vial keyboard** (QWERTY + home-row mods, tap-dance Enter/Escape, a Mac/Windows toggle
+layer, a mouse-emulation layer using ZMK's `&mmv`/`&mkp`/`&msc` — no physical trackball needed).
+Iterated heavily on this live with both the file and the running boards. West workspace
+(`zephyr/`, `zmk/`, `zmk-dongle-display/`, `modules/`, `.west/`, `build/`) now lives **inside**
+this repo instead of a separate `~/totem` checkout, and is gitignored — see the new
+`.gitignore`. Re-fetch with `west init -l config && west update` from the repo root if it's ever
+missing, then re-apply `zmk-dongle-display-local-fixes.patch` per the section above before
+building.
+
+**Real bug found and fixed: a stale top-level `config/totem.keymap` (and `config/totem.conf`)
+was silently shadowing the real keymap file for every build, for who knows how long.** ZMK's
+keymap-file resolution (`zmk/app/boards/post_boards_shields.cmake`) doesn't just match on board
+or full shield name — it also derives a shortened "shield folder name" candidate (here: `totem`,
+since `totem_left`/`totem_right`/`totem_dongle` all live in one `config/boards/shields/totem/`
+folder) and searches `ZMK_CONFIG` (`config/`) for `<candidate>.keymap` **before** ever looking in
+the shield's own directory. Since a leftover `config/totem.keymap` existed (an early draft,
+predating the current shield-based layout — plain QWERTY, `&mo`-only layer access, no combos/
+mod-taps/tap-dance), every build silently compiled *that* instead of
+`config/boards/shields/totem/totem.keymap`, no error, no warning. Confirmed definitively via
+`grep KEYMAP_FILE build/*/CMakeCache.txt` — it pointed at the top-level file for all three
+targets. `config/totem.conf` had the same shadowing problem for Kconfig fragments (merged
+instead of overridden, so less harmful, but still confusing). **Fix: deleted both orphaned
+files.** If you ever add a per-board or per-shield override file at the `config/` root again,
+double check `KEYMAP_FILE` in the resulting `CMakeCache.txt` to make sure it's the file you
+think it is — this class of bug produces a firmware that builds and flashes with zero errors
+while silently running the wrong keymap.
+
+**Confirmed empirically: peripheral (`totem_left`/`totem_right`) firmware is invariant to keymap
+content.** After fixing the shadowing bug and rebuilding, `left.uf2`/`right.uf2` came out
+byte-for-byte identical to the previous (wrong-keymap) build, while `dongle.uf2` differed
+(790528 → 793088 bytes). This matches ZMK's split architecture — peripherals only scan the
+matrix and forward raw key-position events over BLE; all keymap/layer/behavior logic runs on the
+central (the dongle, in this setup). **Practical upshot: a pure keymap-content change (new
+layers, behaviors, combos, timing tweaks — anything in `totem.keymap`/`totem.conf` that isn't
+matrix/physical-layout) only requires rebuilding and reflashing the dongle.** No `settings_reset`
+needed either in that case, since bonds aren't affected. Left/right only need rebuilding if
+`totem.dtsi`, the `totem_left.overlay`/`totem_right.overlay` files, or `totem-layouts.dtsi`
+change. See `FLASHING.md` for the updated quick-reference on this.
+
+**Also re-confirmed the "one half won't reconnect after settings_reset" flakiness** documented
+above under left/right — this time it was the left half after its first `settings_reset` +
+reflash cycle (showed BLE-connected but no keystrokes came through); a second
+`settings_reset` + reflash cycle on the same board fixed it, same as before. Root cause still
+not pinned down, but the workaround remains reliable.
+
+**Verification performed:** all three targets (`totem_left`, `totem_right`,
+`totem_dongle dongle_display`) rebuilt clean from scratch with the orphaned files removed,
+confirmed `KEYMAP_FILE` in each `CMakeCache.txt` now points at
+`config/boards/shields/totem/totem.keymap`. All three boards reflashed (left twice, due to the
+reconnect flakiness above) and confirmed typing works correctly from both halves through the
+dongle with the new keymap.

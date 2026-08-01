@@ -53,6 +53,19 @@ devicetree/Kconfig (display tweaks, sleep settings, etc.), just flash the real f
 (dongle) and deep-sleep battery saver (left/right); reflash them the same way as any other
 firmware update, `settings_reset` not required.
 
+## Reflashing after a pure keymap change (dongle only)
+
+Peripherals (left/right) don't process the keymap at all — they only scan the matrix and forward
+raw key-position events over BLE. All layer/behavior/combo logic runs on the **dongle** (the
+central). Confirmed empirically: after a keymap-only change, `left.uf2`/`right.uf2` rebuilt
+byte-identical to the previous build, while `dongle.uf2` differed.
+
+So for a change to `totem.keymap` or `totem.conf` (new layers, behaviors, combos, timing
+tweaks — anything that isn't matrix/physical-layout), you only need to rebuild and reflash the
+**dongle**: `settings_reset_nice_nano.uf2` is not needed either, since bonds aren't affected —
+just flash `dongle.uf2` directly. Left/right only need rebuilding if `totem.dtsi`, the
+`totem_left.overlay`/`totem_right.overlay` files, or `totem-layouts.dtsi` change.
+
 ## OLED display (dongle)
 
 Driver is `sinowealth,sh1106` (128x64, on `pro_micro_i2c`) — the module's stated default
@@ -93,3 +106,21 @@ membership only refreshes on a real new login session.
 If you need to change the config and rebuild, see `NOTES.md` for the Docker-based `west build`
 commands used originally (image: `zmkfirmware/zmk-build-arm:stable`). The `config/` and
 `build.yaml` in this repo are the exact sources these `firmware/*.uf2` files were built from.
+
+The west workspace (`zephyr/`, `zmk/`, `zmk-dongle-display/`, `modules/`, `.west/`, `build/`)
+lives inside this repo and is gitignored. If it's missing, recreate it from the repo root:
+```bash
+west init -l config
+west update
+```
+then re-apply `zmk-dongle-display-local-fixes.patch` (see above) before building.
+
+**Gotcha to watch for:** don't add a keymap/conf file directly at the `config/` root (e.g.
+`config/totem.keymap`) unless you specifically intend it as an override — ZMK's build will
+silently prefer it over `config/boards/shields/totem/totem.keymap` for *any* `totem_*` shield,
+with no error or warning. This bit us once already (see the 2026-08-01 status update in
+`NOTES.md`). If a rebuild ever behaves like it ignored your keymap edits, check which file was
+actually used:
+```bash
+grep KEYMAP_FILE build/*/CMakeCache.txt
+```
