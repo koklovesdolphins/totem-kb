@@ -81,7 +81,7 @@ label= "BASE"                              ;
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃ SHIFT/BSPC┃     Z     ┃     X     ┃     C     ┃     V     ┃     B     ┃   ┃     N     ┃     M     ┃     ,     ┃     .     ┃     /     ┃SHIFT/QUOT ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-//                                     ┃   LCTRL   ┃    SPC    ┃ ENTR/ESC  ┃   ┃   ENTER   ┃    NAV    ┃  SYM/TAB  ┃
+//                                     ┃ TAB/LCTRL ┃    SPC    ┃ ENTR/ESC  ┃   ┃   ENTER   ┃    NAV    ┃  SYM/TAB  ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
@@ -89,7 +89,7 @@ label= "BASE"                              ;
                 &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp P
                 &kp A           &mt LCTRL S     &mt LGUI D      &mt LALT F      &kp G               &kp H           &mt LCTRL J     &mt LGUI K      &mt LALT L      &kp SEMI
     &mt LSHFT BSPC  &kp Z       &kp X           &kp C           &kp V           &kp B               &kp N           &kp M           &kp COMMA       &kp DOT         &kp FSLH        &mt RSHFT SQT
-                                                &kp LCTRL       &kp SPACE       &td0                &kp RET         &mo NAV         &lt SYM TAB
+                                                &mt LCTRL TAB   &kp SPACE       &td0                &kp RET         &mo NAV         &lt SYM TAB
                         >;
                 };
 
@@ -120,7 +120,7 @@ label= "MAC"                               ;
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃           ┃           ┃           ┃           ┃           ┃           ┃   ┃           ┃           ┃           ┃           ┃           ┃           ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
-//                                     ┃   LGUI    ┃           ┃           ┃   ┃           ┃           ┃           ┃
+//                                     ┃ TAB/LGUI  ┃           ┃           ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
  bindings = <
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
@@ -128,7 +128,7 @@ label= "MAC"                               ;
                 &trans          &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans
                 &trans          &trans          &mt LALT D      &mt LGUI F      &trans              &trans          &trans          &mt LALT K      &mt LGUI L      &trans
     &trans          &trans      &trans          &trans          &trans          &trans              &trans          &trans          &trans          &trans          &trans          &trans
-                                                &kp LGUI        &trans          &trans              &trans          &trans          &trans
+                                                &mt LGUI TAB    &trans          &trans              &trans          &trans          &trans
                         >;
                 };
 
