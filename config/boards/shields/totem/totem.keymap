@@ -144,7 +144,7 @@ label= "NAVI"                              ;
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
 //             ┃    BSPC   ┃     {     ┃     [     ┃     ]     ┃     }     ┃   ┃    VOL-   ┃   LEFT    ┃    DOWN   ┃   RIGHT   ┃           ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
-// ┃   DEL     ┃           ┃           ┃     (     ┃     )     ┃           ┃   ┃           ┃   ZOOM-   ┃           ┃  ZOOM+    ┃           ┃    \      ┃
+// ┃           ┃    DEL    ┃           ┃     (     ┃     )     ┃           ┃   ┃           ┃   ZOOM-   ┃           ┃  ZOOM+    ┃           ┃    \      ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
 //                                     ┃           ┃   MOUSE   ┃    ESC    ┃   ┃           ┃           ┃           ┃
 //                                     ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛   ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
@@ -153,7 +153,7 @@ label= "NAVI"                              ;
 
                 &kp GRAVE       &kp LS(GRAVE)   &kp HOME        &kp END         &trans              &kp C_VOL_UP          &kp MINUS       &kp UP          &kp EQUAL      &trans 
                 &kp BSPC        &kp LBRC        &kp LBKT        &kp RBKT        &kp RBRC            &kp C_VOL_DN          &kp LEFT        &kp DOWN        &kp RIGHT      &trans 
-    &kp DEL         &trans      &trans          &kp LPAR        &kp RPAR        &trans              &trans          &kp LC(MINUS)   &trans          &kp LC(EQUAL)   &trans          &kp BSLH
+        &trans  &kp DEL         &trans          &kp LPAR        &kp RPAR        &trans              &trans          &kp LC(MINUS)   &trans          &kp LC(EQUAL)   &trans          &kp BSLH
                                                 &trans          &mo MOUSE       &kp ESC             &trans          &trans          &trans
                         >;
                 };
