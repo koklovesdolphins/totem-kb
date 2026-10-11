@@ -77,7 +77,7 @@ label= "BASE"                              ;
 //             ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓   ┏━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┳━━━━━━━━━━━┓
 //             ┃     Q     ┃     W     ┃     E     ┃     R     ┃     T     ┃   ┃     Y     ┃     U     ┃     I     ┃     O     ┃     P     ┃
 //             ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫
-//             ┃     A     ┃  CTRL/S   ┃  GUI/D    ┃   ALT/F   ┃     G     ┃   ┃     H     ┃  CTRL/J   ┃  GUI/K    ┃   ALT/L   ┃  SHIFT/;  ┃
+//             ┃  SHIFT/A  ┃  CTRL/S   ┃  GUI/D    ┃   ALT/F   ┃     G     ┃   ┃     H     ┃  CTRL/J   ┃  GUI/K    ┃   ALT/L   ┃  SHIFT/;  ┃
 // ┏━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┓
 // ┃   BSPC    ┃     Z     ┃     X     ┃     C     ┃     V     ┃     B     ┃   ┃     N     ┃     M     ┃     ,     ┃     .     ┃     /     ┃SHIFT/QUOT ┃
 // ┗━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┫   ┣━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━╋━━━━━━━━━━━┻━━━━━━━━━━━┻━━━━━━━━━━━┛
@@ -87,7 +87,7 @@ label= "BASE"                              ;
 // ╷           ╷           ╷           ╷           ╷           ╷           ╷   ╷           ╷           ╷           ╷           ╷           ╷           ╷
 
                 &kp Q           &kp W           &kp E           &kp R           &kp T               &kp Y           &kp U           &kp I           &kp O           &kp P
-                &kp A           &mt LCTRL S     &mt LGUI D      &mt LALT F      &kp G               &kp H           &mt LCTRL J     &mt LGUI K      &mt LALT L      &mt RSHFT SEMI
+                &mt LSHFT A     &mt LCTRL S     &mt LGUI D      &mt LALT F      &kp G               &kp H           &mt LCTRL J     &mt LGUI K      &mt LALT L      &mt RSHFT SEMI
     &kp BSPC    &kp Z           &kp X           &kp C           &kp V           &kp B               &kp N           &kp M           &kp COMMA       &kp DOT         &kp FSLH        &mt RSHFT SQT
                                                 &mt LCTRL TAB   &mt LSHFT SPACE &td0                &kp RET         &lt NAV BSPC    &lt SYM TAB
                         >;
